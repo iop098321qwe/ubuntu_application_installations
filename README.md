@@ -26,6 +26,6 @@ sudo ./uric.sh
 ``` 
 in the directory where the script is stored.
 
-#### Refer to:
+#### Refer to make executable everywhere:
 
 * https://www.maketecheasier.com/make-scripts-executable-everywhere-linux/
