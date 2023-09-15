@@ -1,8 +1,25 @@
 #!/bin/bash
 
+# Initialize lists to track command success and failures
+successful_commands=()
+failed_commands=()
+
+# Helper function to run a command and track its success or failure
+run_command() {
+    local cmd="$1"
+    eval "$cmd"
+    local status=$?
+    if [ $status -eq 0 ]; then
+        successful_commands+=("$cmd")
+    else
+        failed_commands+=("$cmd")
+    fi
+    return $status
+}
+
 # Update the package list and upgrade installed packages
-sudo apt update -y
-sudo apt upgrade -y
+run_command "sudo apt update -y"
+run_command "sudo apt upgrade -y"
 
 # List of unwanted applications to remove
 unwanted_apps=(
@@ -48,28 +65,28 @@ unwanted_apps=(
 )
 
 # Create an .ods file for logging removed applications
-echo "Removed Applications:" > 15.09.23_removed_apps.ods
+run_command "echo 'Removed Applications:' > 15.09.23_removed_apps.ods"
 
 # Remove unwanted applications from APT and SNAP
 for app in "${unwanted_apps[@]}"; do
     # Check if the application is installed via APT
     if dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "ok installed"; then
-        sudo apt remove --purge -y "$app"
-        echo "$app" >> 15.09.23_removed_apps.ods
+        run_command "sudo apt remove --purge -y $app"
+        run_command "echo $app >> 15.09.23_removed_apps.ods"
     else
         echo "$app is not installed via APT."
     fi
     # Check if the application is installed via SNAP
     if snap list "$app" &>/dev/null; then
-        sudo snap remove --purge "$app"
-        echo "$app (from SNAP)" >> 15.09.23_removed_apps.ods
+        run_command "sudo snap remove --purge $app"
+        run_command "echo $app (from SNAP) >> 15.09.23_removed_apps.ods"
     else
         echo "$app is not installed via SNAP."
     fi
 done
 
 # Remove Firefox user configurations
-rm -rf ~/.mozilla
+run_command "rm -rf ~/.mozilla"
 
 # List of desired applications to install
 desired_apps=(
@@ -85,34 +102,45 @@ desired_apps=(
 for app in "${desired_apps[@]}"; do
     # Check if the application is already installed via APT
     if ! dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "ok installed"; then
-        sudo apt install -y "$app"
+        run_command "sudo apt install -y $app"
     else
         echo "$app is already installed."
     fi
 done
 
 # Update snap packages
-sudo snap refresh
+run_command "sudo snap refresh"
 
 # Check and fix broken package dependencies
-sudo apt --fix-broken install -y
+run_command "sudo apt --fix-broken install -y"
 
 # Check for and install firmware updates
-sudo fwupdmgr refresh
-sudo fwupdmgr update
+run_command "sudo fwupdmgr refresh"
+run_command "sudo fwupdmgr update"
 
 # Run distribution upgrade
-sudo apt dist-upgrade -y
+run_command "sudo apt dist-upgrade -y"
 
 # Cleanup residual files
-sudo apt autoremove -y && sudo apt clean
+run_command "sudo apt autoremove -y && sudo apt clean"
+
+# Output successful and failed commands
+echo -e "\nSuccessful Commands:"
+for cmd in "${successful_commands[@]}"; do
+    echo "- $cmd"
+done
+
+echo -e "\nFailed Commands:"
+for cmd in "${failed_commands[@]}"; do
+    echo "- $cmd"
+done
 
 echo "Script execution completed."
 
 # Prompt to reboot the system
 read -p "Would you like to reboot the system now? (yes/no): " choice
 case "$choice" in
-  yes|Yes|Y|y) sudo reboot;;
+  yes|Yes|Y|y) run_command "sudo reboot";;
   no|No|N|n) echo "Reboot aborted.";;
   *) echo "Invalid choice. Not rebooting.";;
 esac
