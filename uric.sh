@@ -42,7 +42,12 @@ unwanted_apps=(
 
 # Remove unwanted applications
 for app in "${unwanted_apps[@]}"; do
-    sudo apt remove --purge -y "$app"
+    # Check if the application is installed
+    if dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "ok installed"; then
+        sudo apt remove --purge -y "$app"
+    else
+        echo "$app is not installed."
+    fi
 done
 
 # List of desired applications to install
@@ -56,10 +61,23 @@ desired_apps=(
 
 # Install desired applications
 for app in "${desired_apps[@]}"; do
-    sudo apt install -y "$app"
+    # Check if the application is already installed
+    if ! dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "ok installed"; then
+        sudo apt install -y "$app"
+    else
+        echo "$app is already installed."
+    fi
 done
 
 # Run the specified cleanup command
-sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt clean
+sudo apt autoremove -y && sudo apt clean
 
 echo "Script execution completed."
+
+# Prompt to reboot the system
+read -p "Would you like to reboot the system now? (yes/no): " choice
+case "$choice" in
+  yes|Yes|Y|y) sudo reboot;;
+  no|No|N|n) echo "Reboot aborted.";;
+  *) echo "Invalid choice. Not rebooting.";;
+esac
