@@ -13,3 +13,6 @@ This should update and upgrade the system, remove unwanted applications, then in
 * The script will then self-destruct and remove itself from the computer.
 * The computer will reboot and your system should be ready to use.
 
+## Run 
+
+* Run using `chmod +x uric.sh && sudo ./uric.sh`
