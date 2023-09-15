@@ -38,13 +38,24 @@ unwanted_apps=(
     unity-scope-virtualbox
     unity-scope-zotero
     unity-webapps-common
+    firefox
+    obs-studio
+    screenrec
+    pycharm
+    remmina
+    rocketchat-desktop
+    rhythmbox
 )
+
+# Create an .ods file for logging removed applications
+echo "Removed Applications:" > 15.09.23_removed_apps.ods
 
 # Remove unwanted applications
 for app in "${unwanted_apps[@]}"; do
     # Check if the application is installed
     if dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "ok installed"; then
         sudo apt remove --purge -y "$app"
+        echo "$app" >> 15.09.23_removed_apps.ods
     else
         echo "$app is not installed."
     fi
@@ -57,6 +68,7 @@ desired_apps=(
     brave-browser # Brave Browser
     htop
     neofetch
+    notion
 )
 
 # Install desired applications
@@ -71,6 +83,19 @@ done
 
 # Run the specified cleanup command
 sudo apt autoremove -y && sudo apt clean
+
+# Update snap packages
+sudo snap refresh
+
+# Check and fix broken package dependencies
+sudo apt --fix-broken install -y
+
+# Check for and install firmware updates
+sudo fwupdmgr refresh
+sudo fwupdmgr update
+
+# Run distribution upgrade
+sudo apt dist-upgrade -y
 
 echo "Script execution completed."
 
