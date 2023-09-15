@@ -20,7 +20,7 @@ run_command() {
 # Dynamic filename for log file based on current date and time
 current_datetime=$(date '+%d.%m.%y.%H.%M')
 log_filename="${current_datetime}_script_log.ods"
-log_directory="$HOME/Documents/Update Script Logs"
+log_directory="~/Documents/Update Script Logs"
 full_log_path="$log_directory/$log_filename"
 
 # Create directory for storing the log if it doesn't exist
