@@ -17,6 +17,15 @@ run_command() {
     return $status
 }
 
+# Dynamic filename for log file based on current date and time
+current_datetime=$(date '+%d.%m.%y.%H.%M')
+log_filename="${current_datetime}_script_log.ods"
+log_directory="$HOME/Documents/Update Script Logs"
+full_log_path="$log_directory/$log_filename"
+
+# Create directory for storing the log if it doesn't exist
+[ ! -d "$log_directory" ] && mkdir -p "$log_directory"
+
 # Update the package list and upgrade installed packages
 run_command "sudo apt update -y"
 run_command "sudo apt upgrade -y"
@@ -64,24 +73,20 @@ unwanted_apps=(
     rhythmbox
 )
 
-# Create an .ods file for logging removed applications
-run_command "echo 'Removed Applications:' > 15.09.23_removed_apps.ods"
+# Initialize the log file
+echo 'Removed Applications:' > "$full_log_path"
 
 # Remove unwanted applications from APT and SNAP
 for app in "${unwanted_apps[@]}"; do
     # Check if the application is installed via APT
     if dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "ok installed"; then
         run_command "sudo apt remove --purge -y $app"
-        run_command "echo $app >> 15.09.23_removed_apps.ods"
-    else
-        echo "$app is not installed via APT."
+        echo $app >> "$full_log_path"
     fi
     # Check if the application is installed via SNAP
     if snap list "$app" &>/dev/null; then
         run_command "sudo snap remove --purge $app"
-        run_command "echo $app (from SNAP) >> 15.09.23_removed_apps.ods"
-    else
-        echo "$app is not installed via SNAP."
+        echo $app "(from SNAP)" >> "$full_log_path"
     fi
 done
 
@@ -98,18 +103,24 @@ desired_apps=(
     notion
 )
 
+# Add section for installed apps in the log
+echo -e "\nInstalled Applications:" >> "$full_log_path"
+
 # Install desired applications
 for app in "${desired_apps[@]}"; do
     # Check if the application is already installed via APT
     if ! dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "ok installed"; then
         run_command "sudo apt install -y $app"
-    else
-        echo "$app is already installed."
+        echo $app >> "$full_log_path"
     fi
 done
 
-# Update snap packages
+# Update snap packages and log them
 run_command "sudo snap refresh"
+
+# Add section for updated apps in the log
+echo -e "\nUpdated Applications:" >> "$full_log_path"
+echo $(sudo apt list --upgradable 2>/dev/null | grep upgradable | awk -F/ '{print $1}') >> "$full_log_path"
 
 # Check and fix broken package dependencies
 run_command "sudo apt --fix-broken install -y"
@@ -130,16 +141,12 @@ for cmd in "${successful_commands[@]}"; do
     echo "- $cmd"
 done
 
-echo -e "\n"
-
-echo -e "Failed Commands:"
+echo -e "\nFailed Commands:"
 for cmd in "${failed_commands[@]}"; do
     echo "- $cmd"
 done
 
-echo -e "\n"
-
-echo "Script execution completed."
+echo -e "\nScript execution completed. Your log is stored here: $full_log_path"
 
 # Prompt to reboot the system
 read -p "Would you like to reboot the system now? (yes/no): " choice
