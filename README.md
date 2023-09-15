@@ -15,16 +15,8 @@ This should update and upgrade the system, remove unwanted applications, then in
 
 ## Run 
 
-* Run prior to using: 
-```bash
-chmod +x uric.sh
-``` 
-in the directory where the script is stored.
-* Run using: 
-```bash
-sudo ./uric.sh
-``` 
-in the directory where the script is stored.
+* Run prior to using: `chmod +x uric.sh` in the directory where the script is stored.
+* Run using: `sudo ./uric.sh` in the directory where the script is stored.
 
 #### Refer to make executable everywhere:
 
