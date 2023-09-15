@@ -32,6 +32,7 @@ This should update and upgrade the system, remove unwanted applications, then in
 * [Script](https://www.reddit.com/r/brave_browser/comments/hetngh/where_does_brave_store_extensions_from_the_chrome/)
 * Path for Brave Browser preferences: `/home/dallas/.config/BraveSoftware/Brave-Browser/Default/Preferences`
 * Upload preferences into Brave Browser folder
+* [How to Overwrite File](https://stackoverflow.com/questions/4676459/write-to-file-but-overwrite-it-if-it-exists)
 
 #### Create the directory 'github_repositories' under /Documents:
 
