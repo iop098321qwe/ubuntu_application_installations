@@ -33,3 +33,8 @@ in the directory where the script is stored.
 #### To install KDE-plasma:
 
 * https://tecadmin.net/how-to-install-kde-desktop-on-ubuntu/
+
+#### Automatically install browser extensions for Brave
+
+* [Location](https://www.reddit.com/r/brave_browser/comments/hetngh/where_does_brave_store_extensions_from_the_chrome/)
+* [Script](https://www.reddit.com/r/brave_browser/comments/hetngh/where_does_brave_store_extensions_from_the_chrome/)
