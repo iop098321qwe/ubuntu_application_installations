@@ -81,12 +81,12 @@ for app in "${unwanted_apps[@]}"; do
     # Check if the application is installed via APT
     if dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "ok installed"; then
         run_command "sudo apt remove --purge -y $app"
-        echo $app >> "$full_log_path"
+        echo "$app" >> "$full_log_path"
     fi
     # Check if the application is installed via SNAP
     if snap list "$app" &>/dev/null; then
         run_command "sudo snap remove --purge $app"
-        echo $app "(from SNAP)" >> "$full_log_path"
+        echo "$app (from SNAP)" >> "$full_log_path"
     fi
 done
 
@@ -111,7 +111,7 @@ for app in "${desired_apps[@]}"; do
     # Check if the application is already installed via APT
     if ! dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "ok installed"; then
         run_command "sudo apt install -y $app"
-        echo $app >> "$full_log_path"
+        echo "$app" >> "$full_log_path"
     fi
 done
 
@@ -120,7 +120,10 @@ run_command "sudo snap refresh"
 
 # Add section for updated apps in the log
 echo -e "\nUpdated Applications:" >> "$full_log_path"
-echo $(sudo apt list --upgradable 2>/dev/null | grep upgradable | awk -F/ '{print $1}') >> "$full_log_path"
+updated_apps=$(sudo apt list --upgradable 2>/dev/null | grep upgradable | awk -F/ '{print $1}')
+for app in $updated_apps; do
+    echo "$app" >> "$full_log_path"
+done
 
 # Check and fix broken package dependencies
 run_command "sudo apt --fix-broken install -y"
@@ -136,12 +139,12 @@ run_command "sudo apt dist-upgrade -y"
 run_command "sudo apt autoremove -y && sudo apt clean"
 
 # Output successful and failed commands
-echo -e "\nSuccessful Commands:"
+echo -e "\nSuccessful Commands:" 
 for cmd in "${successful_commands[@]}"; do
     echo "- $cmd"
 done
 
-echo -e "\nFailed Commands:"
+echo -e "\nFailed Commands:" 
 for cmd in "${failed_commands[@]}"; do
     echo "- $cmd"
 done

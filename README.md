@@ -17,7 +17,7 @@ This should update and upgrade the system, remove unwanted applications, then in
 
 * Run prior to using: `chmod +x uric.sh` in the directory where the script is stored.
 * Move the script to /usr/local/bin: `sudo cp uric.sh /usr/local/bin/`.
-* Now, you can run the script from any directory by simply typing `sudo uric.sh`.
+* Now, you can run the script from any directory by simply typing `uric.sh`.
 
 **OR**
 * Run using: `sudo ./uric.sh` in the directory where the script is stored.
