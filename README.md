@@ -26,10 +26,12 @@ This should update and upgrade the system, remove unwanted applications, then in
 
 * https://tecadmin.net/how-to-install-kde-desktop-on-ubuntu/
 
-#### Automatically install browser extensions for Brave:
+#### Automatically install browser extensions for Brave and copy preferences:
 
 * [Location](https://www.reddit.com/r/brave_browser/comments/hetngh/where_does_brave_store_extensions_from_the_chrome/)
 * [Script](https://www.reddit.com/r/brave_browser/comments/hetngh/where_does_brave_store_extensions_from_the_chrome/)
+* Path for Brave Browser preferences: `/home/dallas/.config/BraveSoftware/Brave-Browser/Default/Preferences`
+* Upload preferences into Brave Browser folder
 
 #### Create the directory 'github_repositories' under /Documents:
 
