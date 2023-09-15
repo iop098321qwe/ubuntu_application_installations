@@ -34,3 +34,4 @@ This should update and upgrade the system, remove unwanted applications, then in
 #### Create the directory 'github_repositories' under /Documents:
 
 * [Instructions](https://linuxhandbook.com/make-directory-only-if-doesnt-exist/)
+* Add 'open_work_tabs', 'terminal_documentation', and 'custom_bash_commands' repos in 'github_repositories' directory
