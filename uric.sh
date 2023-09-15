@@ -115,7 +115,7 @@ run_command "sudo snap refresh"
 run_command "sudo apt --fix-broken install -y"
 
 # Check for and install firmware updates
-run_command "sudo fwupdmgr refresh"
+run_command "sudo fwupdmgr refresh --force"
 run_command "sudo fwupdmgr update"
 
 # Run distribution upgrade
@@ -130,10 +130,14 @@ for cmd in "${successful_commands[@]}"; do
     echo "- $cmd"
 done
 
-echo -e "\nFailed Commands:"
+echo -e "\n"
+
+echo -e "Failed Commands:"
 for cmd in "${failed_commands[@]}"; do
     echo "- $cmd"
 done
+
+echo -e "\n"
 
 echo "Script execution completed."
 
