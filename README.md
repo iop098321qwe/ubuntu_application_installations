@@ -15,4 +15,9 @@ This should update and upgrade the system, remove unwanted applications, then in
 
 ## Run 
 
-* Run using `chmod +x uric.sh && sudo ./uric.sh`
+* Run using `chmod +x uric.sh` in the directory where the script is stored.
+* Run using `sudo ./uric.sh` in the directory where the script is stored.
+
+#### Refer to:
+
+* https://www.maketecheasier.com/make-scripts-executable-everywhere-linux/
