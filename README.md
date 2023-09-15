@@ -15,8 +15,16 @@ This should update and upgrade the system, remove unwanted applications, then in
 
 ## Run 
 
-* Run using `chmod +x uric.sh` in the directory where the script is stored.
-* Run using `sudo ./uric.sh` in the directory where the script is stored.
+* Run prior to using: 
+```ruby
+chmod +x uric.sh
+``` 
+in the directory where the script is stored.
+* Run using: 
+```ruby
+sudo ./uric.sh
+``` 
+in the directory where the script is stored.
 
 #### Refer to:
 
