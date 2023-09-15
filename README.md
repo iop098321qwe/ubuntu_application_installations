@@ -29,3 +29,7 @@ in the directory where the script is stored.
 #### Refer to make executable everywhere:
 
 * https://www.maketecheasier.com/make-scripts-executable-everywhere-linux/
+
+#### To install KDE-plasma:
+
+* https://tecadmin.net/how-to-install-kde-desktop-on-ubuntu/
