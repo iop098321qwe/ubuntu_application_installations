@@ -50,16 +50,26 @@ unwanted_apps=(
 # Create an .ods file for logging removed applications
 echo "Removed Applications:" > 15.09.23_removed_apps.ods
 
-# Remove unwanted applications
+# Remove unwanted applications from APT and SNAP
 for app in "${unwanted_apps[@]}"; do
-    # Check if the application is installed
+    # Check if the application is installed via APT
     if dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "ok installed"; then
         sudo apt remove --purge -y "$app"
         echo "$app" >> 15.09.23_removed_apps.ods
     else
-        echo "$app is not installed."
+        echo "$app is not installed via APT."
+    fi
+    # Check if the application is installed via SNAP
+    if snap list "$app" &>/dev/null; then
+        sudo snap remove --purge "$app"
+        echo "$app (from SNAP)" >> 15.09.23_removed_apps.ods
+    else
+        echo "$app is not installed via SNAP."
     fi
 done
+
+# Remove Firefox user configurations
+rm -rf ~/.mozilla
 
 # List of desired applications to install
 desired_apps=(
@@ -73,16 +83,13 @@ desired_apps=(
 
 # Install desired applications
 for app in "${desired_apps[@]}"; do
-    # Check if the application is already installed
+    # Check if the application is already installed via APT
     if ! dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "ok installed"; then
         sudo apt install -y "$app"
     else
         echo "$app is already installed."
     fi
 done
-
-# Run the specified cleanup command
-sudo apt autoremove -y && sudo apt clean
 
 # Update snap packages
 sudo snap refresh
@@ -96,6 +103,9 @@ sudo fwupdmgr update
 
 # Run distribution upgrade
 sudo apt dist-upgrade -y
+
+# Cleanup residual files
+sudo apt autoremove -y && sudo apt clean
 
 echo "Script execution completed."
 
