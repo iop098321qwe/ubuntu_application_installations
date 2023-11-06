@@ -95,12 +95,14 @@ run_command "rm -rf ~/.mozilla"
 
 # List of desired applications to install
 desired_apps=(
-    code # Visual Studio Code
+    codium # Visual Studio Code
     python3
     brave-browser # Brave Browser
     htop
     neofetch
     notion
+    nextcloud-desktop
+    virtualbox
 )
 
 # Add section for installed apps in the log
