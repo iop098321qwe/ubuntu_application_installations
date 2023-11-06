@@ -95,10 +95,7 @@ run_command "rm -rf ~/.mozilla"
 
 # List of desired applications to install
 desired_apps=(
-<<<<<<< HEAD
     codium # Codium
-=======
->>>>>>> 96b8399e41c81453c177447ec60c161587f385bb
     python3
     brave-browser # Brave Browser
     htop
