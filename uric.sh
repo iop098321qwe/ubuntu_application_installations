@@ -160,3 +160,7 @@ case "$choice" in
   no|No|N|n) echo "Reboot aborted.";;
   *) echo "Invalid choice. Not rebooting.";;
 esac
+
+# Open the log file
+
+run_command "cd $log_directory && open $log_filename"
